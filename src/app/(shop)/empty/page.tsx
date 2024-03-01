@@ -1,0 +1,23 @@
+import Link from "next/link";
+import { IoCartOutline } from "react-icons/io5";
+
+export default function () {
+    return (
+        <div className="flex justify-center items-center h-[800px]">
+            <IoCartOutline 
+                className="mx-5"
+                size={80}
+            />
+            <div className="flex flex-col items-center">
+                <h1 className="text-xl font-semibold">Tu carrito esta</h1>
+
+                <Link
+                    href="/"
+                    className="text-blue-500 text-4xl mt-2"
+                >
+                    Regresar
+                </Link>
+            </div>
+        </div>
+    )
+}
