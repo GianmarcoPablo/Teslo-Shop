@@ -3,11 +3,17 @@ import prisma from "../lib/prisma"
 
 async function main() {
 
-    const { categories, products } = initialData
+    const { categories, products, users } = initialData
 
+    await prisma.user.deleteMany()
     await prisma.productImage.deleteMany()
     await prisma.product.deleteMany()
     await prisma.category.deleteMany()
+
+
+    await prisma.user.createMany({
+        data: users,
+    })
 
     // Categorias
 
