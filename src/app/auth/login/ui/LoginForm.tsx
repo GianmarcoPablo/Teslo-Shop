@@ -3,7 +3,7 @@
 import { authenticated } from '@/actions'
 import clsx from 'clsx'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useFormStatus } from 'react-dom'
 import { useFormState } from 'react-dom'
 import { IoInformationOutline } from 'react-icons/io5'
@@ -12,7 +12,11 @@ export default function LoginForm() {
 
     const [state, dispatch] = useFormState(authenticated, undefined)
 
-    console.log(state)
+    useEffect(() => {
+        if (state === "Success") {
+            window.location.replace("/")
+        }
+    }, [state])
 
     return (
         <form action={dispatch} className="flex flex-col">
@@ -33,7 +37,7 @@ export default function LoginForm() {
             />
 
             <div className='flex h-8 items-end space-x-1' aria-live='polite' aria-atomic="true">
-                {state === "CredencialesSignin" && (
+                {state === "CredentialsSignin" && (
                     <div className='flex flex-row mb-2'>
                         <IoInformationOutline className='h-5 w-5 text-red-500' />
                         <p className='text-sm text-red-500'>

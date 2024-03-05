@@ -17,3 +17,8 @@ export { default as QuantitySelector } from "./product/quantity-selector/Quantit
 export { default as productSlideShow } from "./product/slide-Show/productSlideShow"
 export { default as ProductMobileSlideShow } from "./product/slide-Show/ProductMobileSlideShow"
 export { default as StockLabel } from "./product/stock-label/StockLabel"
+
+
+export { default as Provider } from "./provides/Provider"
+
+
