@@ -1,8 +1,11 @@
 "use client"
+import { deleteUserAdress, setUserAdress } from "@/actions";
+import { Address } from "@/interfaces/address.interface";
 import { Country } from "@/interfaces/country.interface";
 import { useAdressStore } from "@/store/address/address-store";
 import clsx from "clsx";
-import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
@@ -20,20 +23,24 @@ type FormInputs = {
 
 interface Props {
     countries: Country[]
+    userStoreAdress?: Partial<Address>
 }
 
-export default function AdressForm({ countries }: Props) {
+export default function AdressForm({ countries, userStoreAdress = {} }: Props) {
 
 
     const { handleSubmit, register, formState: { isValid }, reset } = useForm<FormInputs>({
         defaultValues: {
-            //"Todo leer de la base de datos o de la sesión del usuario."
+            ...(userStoreAdress as any),
+            rememberAdress: true
         }
     });
 
+    const router = useRouter()
+
     const setAdress = useAdressStore(state => state.setAdress)
     const address = useAdressStore(state => state.address)
-
+    const { data: session } = useSession({ required: true })
 
     useEffect(() => {
         if (address.firstName) {
@@ -41,10 +48,17 @@ export default function AdressForm({ countries }: Props) {
         }
     }, [])
 
-    const onSubmit = (data: FormInputs) => {
+    const onSubmit = async (data: FormInputs) => {
+        const { rememberAdress, ...rest } = data
         setAdress(data)
-    }
 
+        if (data.rememberAdress) {
+            await setUserAdress(rest, session!.user.id)
+        } else {
+            await deleteUserAdress(session!.user.id)
+        }
+        router.push("/checkout")
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-2 sm:gap-5 sm:grid-cols-2">
